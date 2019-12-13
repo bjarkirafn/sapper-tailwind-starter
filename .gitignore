@@ -5,4 +5,6 @@
 yarn-error.log
 /cypress/screenshots/
 /__sapper__/
+build
+npm-debug.log
 .env

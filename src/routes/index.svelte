@@ -1,3 +1,8 @@
+<script>
+  // import Tailwindcss from '@layout/Tailwindcss.svelte'
+
+</script>
+
 <style>
   h1,
   figure,

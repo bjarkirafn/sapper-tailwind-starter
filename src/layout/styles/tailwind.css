@@ -1,8 +1,0 @@
-/* Import Tailwind as Global Utils */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
-.bg-from-utils-css {
-    @apply bg-gray-500
-}
