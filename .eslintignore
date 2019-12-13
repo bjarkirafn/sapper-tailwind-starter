@@ -13,3 +13,4 @@ store/*.js
 transition/*.js
 index.js
 compiler.js
+*spec*
