@@ -1,18 +1,19 @@
-import sirv from 'sirv';
-import polka from 'polka';
-import compression from 'compression';
-import * as sapper from '@sapper/server';
-import '@layout/tailwind.css';
+import sirv from 'sirv'
+import polka from 'polka'
+import compression from 'compression'
+import * as sapper from '@sapper/server'
+import Tailwind from '@layout/Tailwind.svelte' // eslint-disable-line no-unused-vars
+// import '@layout/tailwind.css';
 
-const { PORT, NODE_ENV } = process.env;
-const dev = NODE_ENV === 'development';
+const { PORT, NODE_ENV } = process.env
+const dev = NODE_ENV === 'development'
 
 polka() // You can also use Express
-	.use(
-		compression({ threshold: 0 }),
-		sirv('static', { dev }),
-		sapper.middleware()
-	)
-	.listen(PORT, err => {
-		if (err) console.log('error', err);
-	});
+  .use(
+    compression({ threshold: 0 }),
+    sirv('static', { dev }),
+    sapper.middleware()
+  )
+  .listen(PORT, err => {
+    if (err) console.log('error', err)
+  })

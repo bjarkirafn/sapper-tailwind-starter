@@ -7,11 +7,8 @@ import babel from 'rollup-plugin-babel'
 import { terser } from 'rollup-plugin-terser'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
-// import rollup_start_dev from './rollup_start_dev';
-import postcss from 'rollup-plugin-postcss'
 import sveltePreprocess from 'svelte-preprocess'
 import { join } from 'path'
-
 
 const mode = process.env.NODE_ENV
 const dev = mode === 'development'
@@ -24,19 +21,9 @@ const onwarn = (warning, onwarn) =>
 const dedupe = importee =>
   importee === 'svelte' || importee.startsWith('svelte/')
 
-const postcssPlugins = [
-  require('postcss-import')(),
-  require('tailwindcss')()
-  // require("tailwindcss")("./tailwind.config.js"), Uncomment this line to use your own tailwind.config
-]
-
-const preprocess = sveltePreprocess({
-  transformers: { postcss: { plugins: postcssPlugins } }
-})
-
-const shared = [
+const sharedPlugins = [
   alias({
-    resolve: [ '.jsx', '.js', '.svelte', '.css' ],
+    resolve: [ '.jsx', '.js', '.svelte' ],
     entries: [
       'static',
       'src/components',
@@ -57,18 +44,21 @@ const shared = [
   commonjs()
 ]
 
+const sharedSvelte = {
+  preprocess: sveltePreprocess({ postcss: true })
+}
+
 export default {
   client: {
     input: config.client.input(),
     output: config.client.output(),
     plugins: [
-      ...shared,
+      ...sharedPlugins,
       svelte({
+        ...sharedSvelte,
         dev,
         hydratable: true,
-        emitCss: true,
-        // preprocess: sveltePreprocess({ postcss: true })
-        preprocess
+        emitCss: true
       }),
       resolve({
         browser: true,
@@ -102,9 +92,7 @@ export default {
       !dev &&
         terser({
           module: true
-        }),
-        // dev && rollup_start_dev,
-
+        })
     ],
 
     onwarn
@@ -114,20 +102,15 @@ export default {
     input: config.server.input(),
     output: config.server.output(),
     plugins: [
-      ...shared,
+      ...sharedPlugins,
       svelte({
-        // preprocess: sveltePreprocess({ postcss: true }),
+        ...sharedSvelte,
         generate: 'ssr',
         dev
       }),
-       postcss({
-        plugins: postcssPlugins,
-        extract: 'static/global.css'
-      }),
       resolve({
         dedupe
-      }),
-    //   dev && rollup_start_dev,
+      })
     ],
     external: Object.keys(pkg.dependencies).concat(
       require('module').builtinModules ||
@@ -140,7 +123,7 @@ export default {
   serviceworker: {
     input: config.serviceworker.input(),
     output: config.serviceworker.output(),
-    plugins: [ ...shared, resolve(), !dev && terser() ],
+    plugins: [ ...sharedPlugins, resolve(), !dev && terser() ],
     onwarn
   }
 }

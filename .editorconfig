@@ -11,6 +11,3 @@ trim_trailing_whitespace = true
 [test/**/expected.css]
 insert_final_newline = false
 
-[{package.json,.eslintrc.json}]
-indent_style = space
-indent_size = 2
