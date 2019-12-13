@@ -8,3 +8,5 @@ yarn-error.log
 build
 npm-debug.log
 .env
+.lock
+pnpm-lock.yaml
